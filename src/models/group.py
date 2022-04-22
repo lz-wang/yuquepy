@@ -1,9 +1,8 @@
 """
 References: https://www.yuque.com/yuque/developer/group
 """
-from typing import Optional, Any, Union
-
 from pydantic import BaseModel
+from typing import Optional, Any, Union
 
 
 class GroupData(BaseModel):

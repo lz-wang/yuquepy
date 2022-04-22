@@ -1,9 +1,8 @@
 """
 References: https://www.yuque.com/yuque/developer/doc
 """
-from typing import Optional, Any, Union
-
 from pydantic import BaseModel
+from typing import Optional, Any, Union
 
 from .repo import RepoBaseInfo
 from .user import UserBaseInfo, UserCreatorInfo
