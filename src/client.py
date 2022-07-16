@@ -1,6 +1,7 @@
-import requests
 from typing import List
 from uuid import uuid4
+
+import requests
 
 from models.doc import *
 from models.group import *
