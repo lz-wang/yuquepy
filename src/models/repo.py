@@ -52,7 +52,7 @@ class RepoData(BaseModel):
     toc_yml: Optional[str]
 
     public: int  # 公开状态 [1 - 公开, 0 - 私密]
-    description: str
+    description: Union[str, None]
     pinned_at: Optional[Any]
     achieved_at: Optional[Any]
     created_at: str

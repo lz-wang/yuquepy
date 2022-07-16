@@ -25,7 +25,7 @@ class GroupData(BaseModel):
     members_count: int
 
     public: int
-    description: str
+    description: Union[str, None]
     created_at: str
     updated_at: str
 
@@ -44,7 +44,7 @@ class UserInGroup(BaseModel):
     followers_count: int
     following_count: int
 
-    description: str
+    description: Union[str, None]
     created_at: str
     updated_at: str
     _serializer: str

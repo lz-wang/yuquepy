@@ -11,7 +11,7 @@ class UserBaseInfo(BaseModel):
     login: str
     name: str
 
-    description: str
+    description: Union[str, None]
     avatar_url: str
 
     followers_count: int
@@ -43,7 +43,7 @@ class UserDetailInfo(BaseModel):
     following_count: int
 
     public: int
-    description: str
+    description: Union[str, None]
     created_at: str
     updated_at: str
     _serializer: str
