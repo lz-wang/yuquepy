@@ -1,6 +1,8 @@
 """
 References: https://www.yuque.com/yuque/developer/user
 """
+from typing import Union
+
 from pydantic import BaseModel
 
 
