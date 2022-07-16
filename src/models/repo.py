@@ -1,8 +1,9 @@
 """
 References: https://www.yuque.com/yuque/developer/repo
 """
-from pydantic import BaseModel
 from typing import Optional, Any, Union
+
+from pydantic import BaseModel
 
 from .user import UserBaseInfo
 
@@ -24,7 +25,7 @@ class RepoBaseInfo(BaseModel):
     watches_count: int
 
     public: int  # 公开状态 [1 - 公开, 0 - 私密]
-    description: str
+    description: Union[str, None]
     created_at: str
     updated_at: str
     content_updated_at: str
