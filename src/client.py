@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 from uuid import uuid4
 
 import requests
@@ -125,7 +125,7 @@ class YuqueBaseClient(object):
 
     def create_repo_for_group(self, g_login_or_id, name: str, slug: str = uuid4().hex[:8],
                               description: str = '', public: int = 0,
-                              type_: str = 'Book') -> RepoData:
+                              type_: str = 'Book') -> Tuple[bool, RepoData]:
         """
         public: 0 小组成员可见, 1 互联网可见, 4 知识库成员可见
         type_: 'Book' 普通文档文库, 'Thread' 话题知识库, 'Design' 图片知识库, 'Resource' 资源知识库, 默认 Book
@@ -139,7 +139,7 @@ class YuqueBaseClient(object):
     def create_repo_for_user(self, name: str,
                              u_login_or_id=None, slug: str = uuid4().hex[:8],
                              description: str = '', public: int = 0,
-                             type_: str = 'Book') -> RepoData:
+                             type_: str = 'Book') -> Tuple[bool, RepoData]:
         """
         public: 0 仅自己可见, 1 互联网可见
         type_: 'Book' 普通文档文库, 'Thread' 话题知识库, 'Design' 图片知识库, 'Resource' 资源知识库, 默认 Book
@@ -189,7 +189,7 @@ class YuqueBaseClient(object):
 
     def create_doc(self, r_namespace_or_id,
                    title: str, body: str, format_: str = 'markdown',
-                   public: int = 0, slug: str = uuid4().hex[:8]) -> DocData:
+                   public: int = 0, slug: str = uuid4().hex[:8]) -> Tuple[bool, DocData]:
         format_ = 'markdown' if format_ not in DOC_FORMATS else format_
         params = {'title': title, 'slug': slug, 'body': body,
                   'public': public, 'format': format_}
@@ -204,7 +204,7 @@ class YuqueBaseClient(object):
 
     def doc_update_info(self, r_namespace_or_id, doc_id: int,
                         new_title: str = None, new_body: str = None, new_public: int = 0,
-                        new_slug: str = None, _force_asl: int = 0) -> DocData:
+                        new_slug: str = None, _force_asl: int = 0) -> Tuple[bool, DocData]:
         params = {'title': new_title, 'slug': new_slug, 'body': new_body,
                   'public': new_public, '_force_asl': _force_asl}
         result, data = self._http_put(sub_url=f'/repos/{r_namespace_or_id}/docs/{doc_id}',
