@@ -3,11 +3,11 @@ from uuid import uuid4
 
 import requests
 
-from models.doc import *
-from models.group import *
-from models.info import *
-from models.repo import *
-from models.user import *
+from .models.doc import *
+from .models.group import *
+from .models.info import *
+from .models.repo import *
+from .models.user import *
 
 
 class YuqueBaseClient(object):
