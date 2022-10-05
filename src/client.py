@@ -42,11 +42,11 @@ class YuqueBaseClient(object):
     ############################################################################
     #  user 用户 相关接口: https://www.yuque.com/yuque/developer/user
     ############################################################################
-    def list_users_of_group(self, g_login_or_id) -> List[GroupUserData]:
+    def list_users_of_group(self, g_login_or_id) -> Union[List[GroupUserData], None]:
         data = self._http_get(sub_url=f'/groups/{g_login_or_id}/users')
         return [GroupUserData(**user) for user in data['data']] if data else None
 
-    def user_get_info(self, u_login_or_id=None) -> UserDetailInfo:
+    def user_get_info(self, u_login_or_id=None) -> Union[UserDetailInfo, None]:
         if u_login_or_id:
             data = self._http_get(sub_url=f'/users/{u_login_or_id}').get('data')
         else:
@@ -65,18 +65,20 @@ class YuqueBaseClient(object):
         groups = self._http_get(sub_url=f'/groups').get('data')
         return [GroupData(**group) for group in groups] if groups else []
 
-    def create_group(self, name: str, login: str, description: str = ''):
+    def create_group(self, name: str, login: str, description: str = ''
+                     ) -> Tuple[bool, Union[GroupData, ErrorInfo]]:
         params = {'name': name, 'login': login, 'description': description}
         result, data = self._http_post(sub_url=f'/groups', params=params)
         obj_data = GroupData(**data['data']) if result else ErrorInfo(**data)
         return result, obj_data
 
-    def group_get_info(self, g_login_or_id) -> GroupDetailInfo:
+    def group_get_info(self, g_login_or_id) -> Union[GroupDetailInfo, None]:
         result = self._http_get(sub_url=f'/groups/{g_login_or_id}')
         return GroupDetailInfo(**result) if result else None
 
     def group_update_info(self, g_login_or_id, new_name: str = None,
-                          new_login: str = None, new_description: str = None):
+                          new_login: str = None, new_description: str = None
+                          ) -> Tuple[bool, Union[GroupData, ErrorInfo]]:
         params = {}
         if new_name:
             params.update({'name': new_name})
@@ -89,7 +91,7 @@ class YuqueBaseClient(object):
         obj_data = GroupData(**data['data']) if result else ErrorInfo(**data)
         return result, obj_data
 
-    def delete_group(self, g_login_or_id):
+    def delete_group(self, g_login_or_id) -> Tuple[bool, Union[GroupData, ErrorInfo]]:
         """删除 Group"""
         result, data = self._http_delete(sub_url=f'/groups/{g_login_or_id}')
         obj_data = GroupData(**data['data']) if result else ErrorInfo(**data)
@@ -98,14 +100,16 @@ class YuqueBaseClient(object):
     def group_add_user(self, g_login_or_id, u_login_or_id, admin: bool = False):
         return self.group_update_user(g_login_or_id, u_login_or_id, admin)
 
-    def group_update_user(self, g_login_or_id, u_login_or_id, admin: bool = False):
+    def group_update_user(self, g_login_or_id, u_login_or_id, admin: bool = False
+                          ) -> Tuple[bool, Union[GroupUserData, ErrorInfo]]:
         params = {'role': 1} if admin else {'role': 0}
         result, data = self._http_put(sub_url=f'/groups/{g_login_or_id}/users/{u_login_or_id}',
                                       params=params)
         obj_data = GroupUserData(**data['data']) if result else ErrorInfo(**data)
         return result, obj_data
 
-    def group_delete_user(self, g_login_or_id, u_login_or_id):
+    def group_delete_user(self, g_login_or_id, u_login_or_id
+                          ) -> Tuple[bool, Union[UserDetailInfo, None, ErrorInfo]]:
         result, data = self._http_delete(sub_url=f'/groups/{g_login_or_id}/users/{u_login_or_id}')
         obj_data = self.user_get_info(
             u_login_or_id=data['data']['user_id']) if result else ErrorInfo(**data)
@@ -114,18 +118,18 @@ class YuqueBaseClient(object):
     ############################################################################
     #  repo 知识库 相关接口: https://www.yuque.com/yuque/developer/repo
     ############################################################################
-    def list_repos_of_user(self, u_login_or_id=None):
+    def list_repos_of_user(self, u_login_or_id=None) -> List[RepoBaseInfo]:
         u_login_or_id = self.user.id if not u_login_or_id else u_login_or_id
         data = self._http_get(sub_url=f'/users/{u_login_or_id}/repos').get('data')
         return [RepoBaseInfo(**repo) for repo in data] if data else []
 
-    def list_repos_of_group(self, g_login_or_id):
+    def list_repos_of_group(self, g_login_or_id) -> List[RepoBaseInfo]:
         data = self._http_get(sub_url=f'/groups/{g_login_or_id}/repos').get('data')
         return [RepoBaseInfo(**repo) for repo in data] if data else []
 
     def create_repo_for_group(self, g_login_or_id, name: str, slug: str = uuid4().hex[:8],
                               description: str = '', public: int = 0,
-                              type_: str = 'Book') -> Tuple[bool, RepoData]:
+                              type_: str = 'Book') -> Tuple[bool, Union[RepoData, ErrorInfo]]:
         """
         public: 0 小组成员可见, 1 互联网可见, 4 知识库成员可见
         type_: 'Book' 普通文档文库, 'Thread' 话题知识库, 'Design' 图片知识库, 'Resource' 资源知识库, 默认 Book
@@ -139,7 +143,7 @@ class YuqueBaseClient(object):
     def create_repo_for_user(self, name: str,
                              u_login_or_id=None, slug: str = uuid4().hex[:8],
                              description: str = '', public: int = 0,
-                             type_: str = 'Book') -> Tuple[bool, RepoData]:
+                             type_: str = 'Book') -> Tuple[bool, Union[RepoData, ErrorInfo]]:
         """
         public: 0 仅自己可见, 1 互联网可见
         type_: 'Book' 普通文档文库, 'Thread' 话题知识库, 'Design' 图片知识库, 'Resource' 资源知识库, 默认 Book
@@ -157,7 +161,8 @@ class YuqueBaseClient(object):
 
     def repo_update_info(self, r_namespace_or_id,
                          new_name: str = None, new_slug: str = None, new_toc: str = None,
-                         new_description: str = None, new_public: int = None):
+                         new_description: str = None, new_public: int = None
+                         ) -> Tuple[bool, Union[RepoData, ErrorInfo]]:
         params = {}
         if new_name:
             params.update({'name': new_name})
@@ -174,7 +179,7 @@ class YuqueBaseClient(object):
         obj_data = RepoData(**data['data']) if result else ErrorInfo(**data)
         return result, obj_data
 
-    def delete_repo(self, r_namespace_or_id):
+    def delete_repo(self, r_namespace_or_id) -> Tuple[bool, Union[RepoData, ErrorInfo]]:
         result, data = self._http_delete(sub_url=f'/repos/{r_namespace_or_id}')
         obj_data = RepoData(**data['data']) if result else ErrorInfo(**data)
         return result, obj_data
@@ -182,7 +187,7 @@ class YuqueBaseClient(object):
     ############################################################################
     #  doc 文档 相关接口: https://www.yuque.com/yuque/developer/doc
     ############################################################################
-    def list_docs_of_repo(self, r_namespace_or_id):
+    def list_docs_of_repo(self, r_namespace_or_id) -> List[DocBaseInfo]:
         """需要 Repo 的 abilities.read 权限"""
         data = self._http_get(sub_url=f'/repos/{r_namespace_or_id}/docs').get('data')
         return [DocBaseInfo(**doc) for doc in data] if data else []
@@ -212,7 +217,7 @@ class YuqueBaseClient(object):
         obj_data = DocData(**data['data']) if result else ErrorInfo(**data)
         return result, obj_data
 
-    def delete_doc(self, r_namespace_or_id, doc_id: int):
+    def delete_doc(self, r_namespace_or_id, doc_id: int) -> Tuple[bool, Union[DocData, ErrorInfo]]:
         result, data = self._http_delete(sub_url=f'/repos/{r_namespace_or_id}/docs/{doc_id}')
         obj_data = DocData(**data['data']) if result else ErrorInfo(**data)
         return result, obj_data
