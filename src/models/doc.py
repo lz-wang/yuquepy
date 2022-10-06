@@ -77,8 +77,8 @@ class DocData(BaseModel):
     custom_description: Any
     hits: Optional[int]
 
-    published_at: str
-    first_published_at: str
+    published_at: Union[str, None]
+    first_published_at: Union[str, None]
     content_updated_at: str
     created_at: str
     updated_at: str
