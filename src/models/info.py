@@ -9,5 +9,5 @@ DOC_FORMATS = ['markdown', 'lake', 'html']
 
 class ErrorInfo(BaseModel):
     message: str
-    code: Optional[str]
-    status: Optional[int]
+    code: Optional[str] = None
+    status: Optional[int] = None

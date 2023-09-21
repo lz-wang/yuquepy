@@ -1,7 +1,7 @@
 """
 References: https://www.yuque.com/yuque/developer/group
 """
-from typing import Optional, Any, Union
+from typing import Optional, Any
 
 from pydantic import BaseModel
 
@@ -14,9 +14,9 @@ class GroupData(BaseModel):
     name: str
     avatar_url: str
 
-    owner_id: Optional[int]
-    space_id: Optional[int]
-    organization_id: Optional[int]
+    owner_id: Optional[int] = None
+    space_id: Optional[int] = None
+    organization_id: Optional[int] = None
 
     books_count: int
     public_books_count: int
@@ -25,11 +25,11 @@ class GroupData(BaseModel):
     members_count: int
 
     public: int
-    description: Union[str, None]
+    description: Optional[str] = None
     created_at: str
     updated_at: str
 
-    grains_sum: Optional[int]
+    grains_sum: Optional[int] = None
     _serializer: str
 
 
@@ -44,7 +44,7 @@ class UserInGroup(BaseModel):
     followers_count: int
     following_count: int
 
-    description: Union[str, None]
+    description: Optional[str] = None
     created_at: str
     updated_at: str
     _serializer: str
@@ -57,7 +57,7 @@ class GroupUserData(BaseModel):
     role: int
     visibility: int
     status: int
-    user: Union[UserInGroup, None]
+    user: Optional[UserInGroup] = None
     group: Any
     created_at: str
     updated_at: str

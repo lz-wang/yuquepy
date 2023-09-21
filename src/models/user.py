@@ -1,7 +1,7 @@
 """
 References: https://www.yuque.com/yuque/developer/user
 """
-from typing import Union
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -13,7 +13,7 @@ class UserBaseInfo(BaseModel):
     login: str
     name: str
 
-    description: Union[str, None]
+    description: Optional[str] = None
     avatar_url: str
 
     followers_count: int
@@ -45,7 +45,7 @@ class UserDetailInfo(BaseModel):
     following_count: int
 
     public: int
-    description: Union[str, None]
+    description: Optional[str] = None
     created_at: str
     updated_at: str
     _serializer: str

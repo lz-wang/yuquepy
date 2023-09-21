@@ -31,14 +31,14 @@ class DocBaseInfo(BaseModel):
     read_count: int
     comments_count: int
 
-    cover: Any
-    description: Union[str, None]
-    custom_description: Any
+    cover: Optional[Any] = None
+    description: Optional[str] = None
+    custom_description: Optional[Any] = None
     draft_version: int
     format: str  # 描述了正文的格式 [asl, markdown]
 
-    published_at: Union[str, None]
-    first_published_at: Union[str, None]
+    published_at: Optional[str] = None
+    first_published_at: Optional[str] = None
     content_updated_at: str
     created_at: str
     updated_at: str
@@ -59,9 +59,9 @@ class DocData(BaseModel):
     format: str  # 描述了正文的格式 [asl, markdown]
     body: str  # 正文 Markdown 源代码
     body_draft: str  # 草稿 Markdown 源代码
-    body_html: Optional[str]  # 转换过后的正文 HTML
-    body_lake: Optional[str]  # 语雀 lake 格式的文档内容
-    body_draft_lake: Optional[str]  # 语雀 lake 格式的文档内容
+    body_html: Optional[str] = None  # 转换过后的正文 HTML
+    body_lake: Optional[str] = None  # 语雀 lake 格式的文档内容
+    body_draft_lake: Optional[str] = None  # 语雀 lake 格式的文档内容
 
     public: int  # 是否公开 [1 - 公开, 0 - 私密]
     status: int  # 状态 [1 - 正常, 0 - 草稿]
@@ -69,20 +69,20 @@ class DocData(BaseModel):
     read_status: int
 
     word_count: int
-    likes_count: Union[int, None]
-    comments_count: Union[int, None]
+    likes_count: Optional[int] = None
+    comments_count: Optional[int] = None
 
-    cover: Any
-    description: Union[str, None]
-    custom_description: Any
-    hits: Optional[int]
+    cover: Optional[Any] = None
+    description: Optional[str] = None
+    custom_description: Optional[Any] = None
+    hits: Optional[int] = None
 
-    published_at: Union[str, None]
-    first_published_at: Union[str, None]
+    published_at: Optional[str] = None
+    first_published_at: Optional[str] = None
     content_updated_at: str
     created_at: str
     updated_at: str
-    deleted_at: Union[str, None]
+    deleted_at: Optional[str] = None
     _serializer: str
 
 

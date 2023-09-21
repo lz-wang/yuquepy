@@ -1,7 +1,7 @@
 """
 References: https://www.yuque.com/yuque/developer/repo
 """
-from typing import Optional, Any, Union
+from typing import Optional, Any
 
 from pydantic import BaseModel
 
@@ -25,7 +25,7 @@ class RepoBaseInfo(BaseModel):
     watches_count: int
 
     public: int  # 公开状态 [1 - 公开, 0 - 私密]
-    description: Union[str, None]
+    description: Optional[str] = None
     created_at: str
     updated_at: str
     content_updated_at: str
@@ -38,26 +38,25 @@ class RepoData(BaseModel):
     id: int
     slug: str  # 仓库路径
     name: str  # 仓库名称
-    namespace: Optional[str]
+    namespace: Optional[str] = None
 
     user_id: int
-    user: Union[UserBaseInfo, None]
-    creator_id: Union[int, None]
-
+    user: Optional[UserBaseInfo] = None
+    creator_id: Optional[int] = None
     items_count: int
     likes_count: int
     watches_count: int
 
-    toc: Optional[str]
-    toc_yml: Optional[str]
+    toc: Optional[str] = None
+    toc_yml: Optional[str] = None
 
     public: int  # 公开状态 [1 - 公开, 0 - 私密]
-    description: Union[str, None]
-    pinned_at: Optional[Any]
-    achieved_at: Optional[Any]
+    description: Optional[str] = None
+    pinned_at: Optional[Any] = None
+    achieved_at: Optional[Any] = None
     created_at: str
     updated_at: str
-    content_updated_at: Optional[str]
+    content_updated_at: Optional[str] = None
     _serializer: str
 
 
